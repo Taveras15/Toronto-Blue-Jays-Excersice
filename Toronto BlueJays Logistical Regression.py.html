@@ -1,0 +1,213 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[683]:
+
+
+#Toronto Blue Jays Right Handed Pitcher Predictions
+
+import pandas as pd 
+import seaborn as sns
+import numpy as np
+from scipy import stats
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+
+
+# In[684]:
+
+
+df= pd.read_csv('/Users/idelsontaveras/Downloads/Toronto Blue Jays Research Intern Technical Exercise/deploy.csv')
+
+
+# In[685]:
+
+
+df.head(5)
+
+
+# In[686]:
+
+
+df.shape
+
+
+# In[687]:
+
+
+df.describe()
+
+
+# In[688]:
+
+
+df.isnull().sum()
+
+
+# In[689]:
+
+
+df['SpinRate'] = df['SpinRate'].fillna(df['SpinRate'].mean())
+
+
+# In[690]:
+
+
+df.isnull().sum()
+
+
+# In[691]:
+
+
+np.random.seed(42)
+
+
+# In[692]:
+
+
+InPlayRand = np.random.randint(2, size=len(df))
+
+
+# In[693]:
+
+
+df['InPlayRand'] = InPlay
+
+
+# In[694]:
+
+
+print(df.head())
+
+
+# In[714]:
+
+
+df.corr()['Velo']
+
+
+# In[696]:
+
+
+sns.boxplot(df.Velo)
+
+
+# In[697]:
+
+
+sns.boxplot(df.SpinRate)
+
+
+# In[698]:
+
+
+sns.boxplot(df.HorzBreak)
+
+
+# In[699]:
+
+
+sns.boxplot(df.InducedVertBreak)
+
+
+# In[700]:
+
+
+SpinRate = df['SpinRate']
+df=df.drop(['HorzBreak'], axis=1)
+df['SpinRate']= SpinRate
+df
+
+
+# In[701]:
+
+
+import matplotlib.pyplot as plt
+
+plt.scatter(df['Velo'], df['SpinRate'])
+plt.xlabel('Velo')
+plt.ylabel('SpinRate')
+plt.show()
+             
+
+
+# In[702]:
+
+
+import matplotlib.pyplot as plt
+
+plt.scatter(df['Velo'], df['InducedVertBreak'])
+plt.xlabel('Velo')
+plt.ylabel('InducedVertBreak')
+plt.show()
+
+
+# In[725]:
+
+
+x_train=df[['Velo','SpinRate','InducedVertBreak']]
+y_train= df['InPlayRand']
+x_train.shape
+
+
+# In[726]:
+
+
+x_train
+
+
+# In[727]:
+
+
+y_train
+
+
+# In[741]:
+
+
+model=LogisticRegression()
+
+
+# In[742]:
+
+
+model.fit(x_train, y_train)
+
+
+# In[743]:
+
+
+sklearn_model= LogisticRegression().fit(x_train, y_train)
+sklearn_y_predictions= sklearn_model.predict(x_train)
+sklearn_y_predictions
+
+
+# In[748]:
+
+
+predictions = model.predict(x_train)
+
+
+# In[745]:
+
+
+df['InPlayPredict'] = predictions
+
+
+# In[746]:
+
+
+print(df.tail())
+
+
+# In[752]:
+
+
+df.to_csv('/Users/idelsontaveras/Downloads/Toronto Blue Jays Research Intern Technical Exercise/Predictions.csv', index=False)
+
+
+# In[ ]:
+
+
+
+
