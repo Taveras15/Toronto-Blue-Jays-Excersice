@@ -1,0 +1,238 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[819]:
+
+
+#Toronto Blue Jays Right Handed Pitcher Predictions
+
+import pandas as pd 
+import seaborn as sns
+import numpy as np
+from scipy import stats
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+
+
+# In[820]:
+
+
+df= pd.read_csv('/Users/idelsontaveras/Downloads/Toronto Blue Jays Research Intern Technical Exercise/deploy.csv')
+
+
+# In[821]:
+
+
+df.head(5)
+
+
+# In[822]:
+
+
+df.shape
+
+
+# In[823]:
+
+
+df.describe()
+
+
+# In[824]:
+
+
+df.isnull().sum()
+
+
+# In[825]:
+
+
+df['SpinRate'] = df['SpinRate'].fillna(df['SpinRate'].mean())
+
+
+# In[826]:
+
+
+df.isnull().sum()
+
+
+# In[827]:
+
+
+np.random.seed(42)
+
+
+# In[828]:
+
+
+InPlayRand = np.random.randint(2, size=len(df))
+
+
+# In[829]:
+
+
+df['InPlayRand'] = InPlay
+
+
+# In[830]:
+
+
+print(df.head())
+
+
+# In[831]:
+
+
+df.corr()['Velo']
+
+
+# In[832]:
+
+
+df.corr()['SpinRate']
+
+
+# In[833]:
+
+
+df.corr()['HorzBreak']
+
+
+# In[834]:
+
+
+df.corr()['InducedVertBreak']
+
+
+# In[835]:
+
+
+SpinRate = df['SpinRate']
+df=df.drop(['HorzBreak'], axis=1)
+df['SpinRate']= SpinRate
+df
+
+
+# In[836]:
+
+
+x = df['Velo']
+y = df['SpinRate']
+coefficients = np.polyfit(x, y, 1)
+m = coefficients[0]  
+b = coefficients[1]
+y_pred = m * x + b
+plt.scatter(x, y, label='Data Points')
+plt.plot(x, y_pred, color='red', label='Trend Line')
+plt.xlabel('Velo')
+plt.ylabel('SpinRate')
+plt.legend()
+
+plt.show()
+
+
+# In[837]:
+
+
+x = df['Velo']
+y = df['InducedVertBreak']
+coefficients = np.polyfit(x, y, 1)
+m = coefficients[0]  
+b = coefficients[1]
+y_pred = m * x + b
+plt.scatter(x, y, label='Data Points')
+plt.plot(x, y_pred, color='red', label='Trend Line')
+plt.xlabel('Velo')
+plt.ylabel('InducedVertBreak')
+plt.legend()
+
+plt.show()
+
+
+# In[838]:
+
+
+x = df['SpinRate']
+y = df['InducedVertBreak']
+coefficients = np.polyfit(x, y, 1)
+m = coefficients[0]  
+b = coefficients[1]
+y_pred = m * x + b
+plt.scatter(x, y, label='Data Points')
+plt.plot(x, y_pred, color='red', label='Trend Line')
+plt.xlabel('SpinRate')
+plt.ylabel('InducedVertBreak')
+plt.legend()
+
+plt.show()
+
+
+# In[839]:
+
+
+x_train=df[['Velo','SpinRate','InducedVertBreak']]
+y_train= df['InPlayRand']
+x_train.shape
+
+
+# In[840]:
+
+
+x_train
+
+
+# In[841]:
+
+
+y_train
+
+
+# In[842]:
+
+
+model=LogisticRegression()
+
+
+# In[843]:
+
+
+model.fit(x_train, y_train)
+
+
+# In[844]:
+
+
+sklearn_model= LogisticRegression().fit(x_train, y_train)
+sklearn_y_predictions= sklearn_model.predict(x_train)
+sklearn_y_predictions
+
+
+# In[845]:
+
+
+predictions = model.predict(x_train)
+
+
+# In[846]:
+
+
+df['InPlayPredict'] = predictions
+
+
+# In[847]:
+
+
+print(df.tail())
+
+
+# In[848]:
+
+
+df.to_csv('/Users/idelsontaveras/Downloads/Toronto Blue Jays Research Intern Technical Exercise/Predictions.csv', index=False)
+
+
+# In[ ]:
+
+
+
+
